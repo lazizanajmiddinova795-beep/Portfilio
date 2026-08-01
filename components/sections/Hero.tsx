@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { ArrowDown, Mail, ExternalLink } from "lucide-react";
+import { Github, Linkedin } from "@/components/ui/icons";
 import { useTranslation } from "@/components/providers/I18nProvider";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
+import { profile } from "@/content";
 import AuroraBackground from "@/components/effects/AuroraBackground";
 import MagneticButton from "@/components/effects/MagneticButton";
 
@@ -143,6 +145,28 @@ export default function Hero() {
             >
               <Mail size={16} />
               {t.hero.cta.contact}
+            </MagneticButton>
+          </motion.div>
+
+          {/* Social Buttons */}
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center gap-4 mt-2"
+          >
+            <MagneticButton
+              className="group relative p-3.5 rounded-xl border-2 border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-400 hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all duration-300 shadow-[0_0_0_rgba(52,211,153,0)] hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:-translate-y-1 bg-white/5 backdrop-blur-sm"
+              onClick={() => window.open(profile.socials.find(s => s.label === "GitHub")?.href, "_blank")}
+              aria-label="GitHub"
+            >
+              <Github size={20} className="group-hover:scale-110 transition-transform duration-300" />
+            </MagneticButton>
+            
+            <MagneticButton
+              className="group relative p-3.5 rounded-xl border-2 border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-400 hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all duration-300 shadow-[0_0_0_rgba(52,211,153,0)] hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:-translate-y-1 bg-white/5 backdrop-blur-sm"
+              onClick={() => window.open(profile.socials.find(s => s.label === "LinkedIn")?.href, "_blank")}
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={20} className="group-hover:scale-110 transition-transform duration-300" />
             </MagneticButton>
           </motion.div>
 

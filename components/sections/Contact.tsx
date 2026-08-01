@@ -12,7 +12,10 @@ import {
   MessageSquare,
   CheckCircle2,
   AlertCircle,
+  Copy,
+  Check,
 } from "lucide-react";
+import { Github, Linkedin } from "@/components/ui/icons";
 import MagneticButton from "@/components/effects/MagneticButton";
 
 interface FormState {
@@ -23,33 +26,6 @@ interface FormState {
 }
 
 type SubmitStatus = "idle" | "sending" | "success" | "error";
-
-const CONTACT_INFO = [
-  {
-    icon: Mail,
-    infoKey: "email" as const,
-    value: profile.contact.email,
-    href: `mailto:${profile.contact.email}`,
-  },
-  {
-    icon: Send,
-    infoKey: "telegram" as const,
-    value: profile.contact.telegram,
-    href: profile.contact.telegramUrl,
-  },
-  {
-    icon: Phone,
-    infoKey: "phone" as const,
-    value: profile.contact.phone,
-    href: profile.contact.phoneUrl,
-  },
-  {
-    icon: MapPin,
-    infoKey: "location" as const,
-    value: profile.location,
-    href: undefined,
-  },
-];
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -63,6 +39,7 @@ export default function Contact() {
     message: "",
   });
   const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -88,8 +65,52 @@ export default function Contact() {
     [form]
   );
 
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
   const inputClass =
-    "w-full px-4 py-3 rounded-xl bg-white dark:bg-white/5 border border-green-100 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm outline-none focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-400/20 transition-all duration-200";
+    "w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-[#0a0f0a]/50 border border-green-100 dark:border-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm outline-none focus:border-green-400 dark:focus:border-green-500 focus:ring-2 focus:ring-green-400/20 transition-all duration-200";
+
+  const PROFILES = [
+    {
+      icon: Github,
+      label: "GitHub",
+      value: "lazizanajmiddinova795-beep",
+      href: profile.socials.find((s) => s.label === "GitHub")?.href,
+      copyable: false,
+    },
+    {
+      icon: Linkedin,
+      label: "LinkedIn",
+      value: "Laziza Najmiddinova",
+      href: profile.socials.find((s) => s.label === "LinkedIn")?.href,
+      copyable: false,
+    },
+    {
+      icon: Send,
+      label: t.contact.info.telegram,
+      value: profile.contact.telegram,
+      href: profile.contact.telegramUrl,
+      copyable: true,
+    },
+    {
+      icon: Mail,
+      label: t.contact.info.email,
+      value: profile.contact.email,
+      href: `mailto:${profile.contact.email}`,
+      copyable: true,
+    },
+    {
+      icon: Phone,
+      label: t.contact.info.phone,
+      value: profile.contact.phone,
+      href: profile.contact.phoneUrl,
+      copyable: true,
+    },
+  ];
 
   return (
     <section
@@ -119,47 +140,86 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Professional Profiles Card */}
           <motion.div
-            className="space-y-6"
+            className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-white/5 border border-green-100/80 dark:border-white/10 shadow-lg space-y-6 h-fit"
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="space-y-4">
-              {CONTACT_INFO.map(({ icon: Icon, infoKey, value, href }, i) => (
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              Professional Profiles
+            </h3>
+            
+            <div className="space-y-3">
+              {PROFILES.map(({ icon: Icon, label, value, href, copyable }, i) => (
                 <motion.div
-                  key={infoKey}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-white/5 border border-green-100/80 dark:border-white/10 shadow-sm hover:border-green-200 dark:hover:border-green-800/50 hover:shadow-md transition-all duration-300"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
+                  key={label}
+                  className="group relative flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 dark:bg-[#0a0f0a]/50 border border-transparent hover:border-green-200 dark:hover:border-green-800/50 hover:bg-white dark:hover:bg-white/5 hover:shadow-md transition-all duration-300"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center flex-shrink-0">
-                    <Icon size={18} className="text-green-600 dark:text-green-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-                      {t.contact.info[infoKey]}
-                    </p>
-                    {href ? (
-                      <a
-                        href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
-                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="text-sm font-medium text-gray-900 dark:text-white hover:text-green-600 dark:hover:text-green-400 transition-colors truncate block"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-4 flex-1 min-w-0"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/10 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:text-green-600 dark:group-hover:text-green-400 transition-all duration-300">
+                      <Icon size={18} className="text-gray-600 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors" />
+                    </div>
+                    <div className="min-w-0 flex-1 pr-4">
+                      <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5">
+                        {label}
+                      </p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                         {value}
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  </a>
+
+                  {copyable && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCopy(value, label);
+                      }}
+                      className="p-2 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 dark:hover:text-green-400 transition-all focus:outline-none focus:ring-2 focus:ring-green-400/20 flex-shrink-0"
+                      aria-label="Copy to clipboard"
+                      title="Copy to clipboard"
+                    >
+                      {copiedKey === label ? (
+                        <Check size={16} className="text-green-500" />
+                      ) : (
+                        <Copy size={16} />
+                      )}
+                    </button>
+                  )}
                 </motion.div>
               ))}
+
+              {/* Location item */}
+              <motion.div
+                className="group flex items-center gap-4 p-4 rounded-2xl bg-gray-50/50 dark:bg-[#0a0f0a]/50 border border-transparent"
+                initial={{ opacity: 0, y: 10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.2 + PROFILES.length * 0.1, duration: 0.5 }}
+              >
+                <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/10 shadow-sm flex items-center justify-center flex-shrink-0">
+                  <MapPin size={18} className="text-gray-600 dark:text-gray-400" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-0.5">
+                    {t.contact.info.location}
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                    {profile.location}
+                  </p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
 

@@ -55,6 +55,16 @@ export const profile = {
   // ── Social Links (for footer & contact) ─────────────────────
   socials: [
     {
+      label: "GitHub",
+      icon: "Github",
+      href: "https://github.com/lazizanajmiddinova795-beep",
+    },
+    {
+      label: "LinkedIn",
+      icon: "Linkedin",
+      href: "https://www.linkedin.com/in/laziza-najmiddinova-8a7187427",
+    },
+    {
       label: "Email",
       icon: "Mail",
       href: "mailto:lazizanajmiddinova795@gmail.com",

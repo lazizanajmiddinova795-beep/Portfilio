@@ -1,11 +1,12 @@
 "use client";
 
 import { Heart, Mail, Send } from "lucide-react";
+import { Github, Linkedin } from "@/components/ui/icons";
 import { useTranslation } from "@/components/providers/I18nProvider";
 import { profile } from "@/content";
 
 // Icon map for social links defined in content/profile.ts
-const ICON_MAP = { Mail, Send } as const;
+const ICON_MAP = { Mail, Send, Github, Linkedin } as const;
 type IconKey = keyof typeof ICON_MAP;
 
 const NAV_LINKS = [
@@ -84,9 +85,9 @@ export default function Footer() {
                     target={href.startsWith("http") ? "_blank" : undefined}
                     rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                     aria-label={label}
-                    className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 hover:bg-white dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-all duration-300 shadow-[0_0_0_rgba(52,211,153,0)] hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:-translate-y-1"
                   >
-                    <Icon size={16} />
+                    <Icon size={18} />
                   </a>
                 );
               })}
