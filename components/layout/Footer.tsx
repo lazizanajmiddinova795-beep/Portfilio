@@ -1,17 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Heart, Github, Mail, Send } from "lucide-react";
+import { Heart, Mail, Send } from "lucide-react";
 import { useTranslation } from "@/components/providers/I18nProvider";
+import { profile } from "@/content";
 
-const SOCIAL_LINKS = [
-  {
-    href: "mailto:lazizanajmiddinova795@gmail.com",
-    label: "Email",
-    icon: Mail,
-  },
-  { href: "https://t.me/nlemni", label: "Telegram", icon: Send },
-];
+// Icon map for social links defined in content/profile.ts
+const ICON_MAP = { Mail, Send } as const;
+type IconKey = keyof typeof ICON_MAP;
 
 const NAV_LINKS = [
   { id: "about", key: "about" },
@@ -37,11 +32,13 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-400/20">
-                <span className="text-white font-bold">L</span>
+                <span className="text-white font-bold">
+                  {profile.firstName[0]}
+                </span>
               </div>
               <div>
                 <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                  Laziza Najmiddinova
+                  {profile.name}
                 </p>
                 <p className="text-xs text-green-600 dark:text-green-400">
                   Full Stack Developer · AI Engineer
@@ -77,21 +74,25 @@ export default function Footer() {
               Connect
             </h3>
             <div className="flex gap-3">
-              {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  aria-label={label}
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200"
-                >
-                  <Icon size={16} />
-                </a>
-              ))}
+              {profile.socials.map(({ href, label, icon }) => {
+                const Icon = ICON_MAP[icon as IconKey];
+                if (!Icon) return null;
+                return (
+                  <a
+                    key={label}
+                    href={href}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    aria-label={label}
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200"
+                  >
+                    <Icon size={16} />
+                  </a>
+                );
+              })}
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              lazizanajmiddinova795@gmail.com
+              {profile.contact.email}
             </p>
           </div>
         </div>
@@ -99,7 +100,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-green-100/60 dark:border-green-900/20 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-400 dark:text-gray-600">
-            © {year} Laziza Najmiddinova. {t.footer.rights}
+            © {year} {profile.name}. {t.footer.rights}
           </p>
           <p className="text-xs text-gray-400 dark:text-gray-600 flex items-center gap-1">
             {t.footer.builtWith} Next.js {t.footer.and}{" "}

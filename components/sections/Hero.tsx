@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import { ArrowDown, Mail, ExternalLink } from "lucide-react";
 import { useTranslation } from "@/components/providers/I18nProvider";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import AuroraBackground from "@/components/effects/AuroraBackground";
 import MagneticButton from "@/components/effects/MagneticButton";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -18,12 +19,12 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: "easeOut" },
   },
 };
 
@@ -128,6 +129,7 @@ export default function Hero() {
             <MagneticButton
               onClick={scrollToProjects}
               className="group relative px-8 py-3.5 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold text-sm tracking-wide shadow-lg shadow-green-400/30 hover:shadow-green-400/50 transition-shadow duration-300 flex items-center gap-2"
+              aria-label={t.hero.cta.projects}
             >
               <ExternalLink size={16} />
               {t.hero.cta.projects}
@@ -137,6 +139,7 @@ export default function Hero() {
             <MagneticButton
               onClick={scrollToContact}
               className="group relative px-8 py-3.5 rounded-2xl border-2 border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-400 font-semibold text-sm tracking-wide hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all duration-300 flex items-center gap-2 backdrop-blur-sm"
+              aria-label={t.hero.cta.contact}
             >
               <Mail size={16} />
               {t.hero.cta.contact}

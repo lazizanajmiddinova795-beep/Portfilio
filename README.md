@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Laziza Najmiddinova — Portfolio
 
-## Getting Started
+A world-class personal portfolio built with Next.js 16, React 19, TypeScript, TailwindCSS v4, and Framer Motion v12.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✏️ How to Edit Your Portfolio Content
+
+All editable content lives in the **`content/`** directory.  
+You **never need to touch any component files** to update your information.
+
+```
+content/
+├── profile.ts       → Your name, contact info, location, SEO metadata
+├── about.ts         → Biography paragraphs (EN / UZ / RU)
+├── skills.ts        → Skills with proficiency levels (0–100)
+├── techStack.ts     → Technologies shown in the Tech Stack grid
+├── projects.ts      → Featured projects (VRestro, GymMaster, ...)
+├── projectsInDev.ts → In-development projects with progress %
+├── services.ts      → Services you offer
+├── learning.ts      → Learning journey timeline items
+└── index.ts         → Barrel export (don't edit)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Examples
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Change your email:**
+```ts
+// content/profile.ts
+contact: {
+  email: "your-new-email@gmail.com",
+  ...
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Add a new skill:**
+```ts
+// content/skills.ts
+{ name: "Rust", level: 45, category: "backend" },
+```
 
-## Learn More
+**Add a new project:**
+```ts
+// content/projects.ts
+{
+  id: "my-new-project",
+  name: "My Project",
+  gradient: "from-blue-500 to-purple-500",
+  en: { tagline: "...", description: "...", features: [...] },
+  uz: { tagline: "...", description: "...", features: [...] },
+  ru: { tagline: "...", description: "...", features: [...] },
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Getting Started
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Install dependencies
+npm install
 
-## Deploy on Vercel
+# Run development server
+npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Build for production
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Dev server:** http://localhost:3000
+
+---
+
+## 🏗️ Architecture
+
+```
+app/              → Next.js App Router pages + layout
+components/
+  effects/        → LoadingScreen, CustomCursor, AuroraBackground, etc.
+  layout/         → Navbar, Footer
+  providers/      → ThemeProvider, I18nProvider
+  sections/       → Hero, About, Skills, TechStack, Projects, ...
+content/          → ✏️ All editable content (edit these files)
+hooks/            → useTypingEffect, useAnimatedCounter
+lib/
+  i18n/           → Translation files (import from content/)
+    en.ts         → English UI strings
+    uz.ts         → Uzbek UI strings
+    ru.ts         → Russian UI strings
+    types.ts      → TypeScript interface for translations
+```
+
+---
+
+## 🌐 Internationalization
+
+The portfolio supports **3 languages**: English, Uzbek, Russian.
+
+- Language is saved in `localStorage` and restored on next visit.
+- UI strings (nav, buttons) live in `lib/i18n/*.ts`.
+- Content strings (bio, descriptions) live in `content/*.ts`.
+
+---
+
+Built with ❤️ by Laziza Najmiddinova

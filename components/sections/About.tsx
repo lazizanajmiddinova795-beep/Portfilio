@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { MapPin, Users, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/components/providers/I18nProvider";
+import { profile } from "@/content";
 
 interface StatItemProps {
   value: number;
@@ -127,7 +128,7 @@ export default function About() {
               {[
                 { value: 4, suffix: "+", label: t.about.stats.projects, delay: 0 },
                 { value: 15, suffix: "+", label: t.about.stats.technologies, delay: 0.1 },
-                { value: 17, suffix: "", label: t.about.stats.age, delay: 0.2 },
+                { value: profile.age, suffix: "", label: t.about.stats.age, delay: 0.2 },
               ].map((stat) => (
                 <div
                   key={stat.label}
@@ -140,7 +141,7 @@ export default function About() {
               <div className="p-6 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 text-white col-span-2 sm:col-span-1 flex flex-col items-center justify-center gap-2 shadow-lg shadow-green-400/20">
                 <Users size={24} className="opacity-80" />
                 <span className="font-bold text-lg leading-tight text-center">
-                  Zenfinity
+                  {profile.team.split(" ")[0]}
                 </span>
                 <span className="text-xs opacity-80 font-medium">
                   {t.about.stats.team}
@@ -154,12 +155,12 @@ export default function About() {
                 Languages
               </p>
               <div className="flex flex-wrap gap-3">
-                {["🇺🇿 Uzbek", "🇬🇧 English", "🇷🇺 Russian"].map((lang) => (
+                {profile.languages.map(({ flag, label }) => (
                   <span
-                    key={lang}
+                    key={label}
                     className="px-3 py-1.5 rounded-xl bg-green-50 dark:bg-green-900/20 text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
-                    {lang}
+                    {flag} {label}
                   </span>
                 ))}
               </div>

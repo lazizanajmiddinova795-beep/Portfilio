@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { en } from "@/lib/i18n/en";
 import { uz } from "@/lib/i18n/uz";
 import { ru } from "@/lib/i18n/ru";
-import type { Translations } from "@/lib/i18n/en";
+import type { Translations } from "@/lib/i18n/types";
 
 export type Language = "en" | "uz" | "ru";
 

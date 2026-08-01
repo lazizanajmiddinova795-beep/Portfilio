@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useTheme } from "@/components/providers/ThemeProvider";
 
+/**
+ * Premium custom cursor with a dot + trailing ring.
+ * The ring follows with spring-like lag via RAF.
+ * Hidden automatically on touch-only devices via CSS.
+ */
 export default function CustomCursor() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const dot = cursorDotRef.current;
@@ -25,14 +28,25 @@ export default function CustomCursor() {
       dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
     };
 
-    const onMouseEnterLink = () => {
+    const onMouseEnterInteractive = () => {
       ring.classList.add("cursor-hover");
       dot.classList.add("cursor-hover");
     };
 
-    const onMouseLeaveLink = () => {
+    const onMouseLeaveInteractive = () => {
       ring.classList.remove("cursor-hover");
       dot.classList.remove("cursor-hover");
+    };
+
+    const addInteractiveListeners = () => {
+      document
+        .querySelectorAll(
+          "a, button, [role='button'], input, textarea, select, label[for]"
+        )
+        .forEach((el) => {
+          el.addEventListener("mouseenter", onMouseEnterInteractive);
+          el.addEventListener("mouseleave", onMouseLeaveInteractive);
+        });
     };
 
     const animate = () => {
@@ -42,20 +56,11 @@ export default function CustomCursor() {
       rafId = requestAnimationFrame(animate);
     };
 
-    const addListeners = () => {
-      document
-        .querySelectorAll("a, button, [role='button'], input, textarea, select")
-        .forEach((el) => {
-          el.addEventListener("mouseenter", onMouseEnterLink);
-          el.addEventListener("mouseleave", onMouseLeaveLink);
-        });
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     rafId = requestAnimationFrame(animate);
-    addListeners();
+    addInteractiveListeners();
 
-    const observer = new MutationObserver(addListeners);
+    const observer = new MutationObserver(addInteractiveListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {

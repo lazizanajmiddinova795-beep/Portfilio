@@ -1,26 +1,243 @@
 @import "tailwindcss";
 
+/* ============================================
+   TAILWIND V4 THEME EXTENSION
+   ============================================ */
+@theme {
+  --font-family-sans: var(--font-inter), system-ui, sans-serif;
+
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+
+  --animate-blink: blink 1s step-end infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-ping-slow: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #f0fdf4;
+  --color-bg-card: #ffffff;
+  --color-border: rgba(74, 222, 128, 0.2);
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+
+  --shadow-nm: 6px 6px 12px #d1e8d1, -6px -6px 12px #ffffff;
+  --shadow-nm-inset: inset 4px 4px 8px #d1e8d1, inset -4px -4px 8px #ffffff;
+  --shadow-nm-hover: 8px 8px 20px #c8e0c8, -8px -8px 20px #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --color-bg: #0a0f0a;
+  --color-bg-card: rgba(255, 255, 255, 0.03);
+  --color-border: rgba(74, 222, 128, 0.1);
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #9ca3af;
+
+  --shadow-nm: 6px 6px 12px #061006, -6px -6px 12px #142414;
+  --shadow-nm-inset: inset 4px 4px 8px #061006, inset -4px -4px 8px #142414;
+  --shadow-nm-hover: 8px 8px 20px #050d05, -8px -8px 20px #162816;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   BASE STYLES
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+  overflow-x: hidden;
+  background-color: #f0fdf4;
+  color: #111827;
+}
+
+.dark body {
+  background-color: #0a0f0a;
+  color: #f9fafb;
+}
+
+/* Hide custom cursor on touch devices */
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #4ade80;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+
+/* ============================================
+   TEXT SELECTION
+   ============================================ */
+::selection {
+  background: rgba(74, 222, 128, 0.25);
+  color: #14532d;
+}
+
+/* ============================================
+   CURSOR STYLES
+   ============================================ */
+.cursor-dot {
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.cursor-ring {
+  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+  pointer-events: none;
+}
+.cursor-dot.cursor-hover {
+  background: #22c55e;
+  transform-origin: center;
+}
+.cursor-ring.cursor-hover {
+  width: 44px !important;
+  height: 44px !important;
+  border-color: rgba(74, 222, 128, 0.8);
+  background: rgba(74, 222, 128, 0.04);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes ping-slow {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(74,222,128,0.1) 50%, transparent 75%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #22c55e, #10b981, #22c55e);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+.glass {
+  background: rgba(240, 253, 244, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+.dark .glass {
+  background: rgba(10, 15, 10, 0.7);
+  border: 1px solid rgba(74, 222, 128, 0.08);
+}
+
+.nm-card {
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-nm);
+  border-radius: 16px;
+}
+
+/* ============================================
+   FOCUS STYLES — Accessibility
+   ============================================ */
+:focus-visible {
+  outline: 2px solid #4ade80;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

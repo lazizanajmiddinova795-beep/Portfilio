@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useTypingEffect(
-  words: string[],
+  words: readonly string[],
   typingSpeed = 80,
   deletingSpeed = 40,
   pauseDuration = 2000
