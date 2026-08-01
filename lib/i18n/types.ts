@@ -79,6 +79,7 @@ export interface Translations {
     title: string;
     subtitle: string;
     status: string;
+    availableStatus: string;
     projects: ReadonlyArray<
       ProjectInDevLang & { id: string; icon: string; progress: number }
     >;

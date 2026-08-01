@@ -10,6 +10,10 @@ import {
   BookOpen,
   Camera,
   Clock,
+  Users,
+  Bot,
+  Briefcase,
+  CheckCircle2,
 } from "lucide-react";
 
 const ICON_MAP = {
@@ -18,6 +22,9 @@ const ICON_MAP = {
   Building2,
   BookOpen,
   Camera,
+  Users,
+  Bot,
+  Briefcase,
 };
 
 type IconKey = keyof typeof ICON_MAP;
@@ -79,15 +86,24 @@ export default function ProjectsInDev() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
                 {/* Status badge */}
-                <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-700/30">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
-                  </span>
-                  <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
-                    {t.projectsInDev.status}
-                  </span>
-                </div>
+                {project.progress === 100 ? (
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200/50 dark:border-green-700/30">
+                    <CheckCircle2 size={12} className="text-green-600 dark:text-green-400" />
+                    <span className="text-xs font-semibold text-green-600 dark:text-green-400">
+                      {t.projectsInDev.availableStatus}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-700/30">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500" />
+                    </span>
+                    <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                      {t.projectsInDev.status}
+                    </span>
+                  </div>
+                )}
 
                 {/* Icon */}
                 <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
@@ -98,23 +114,37 @@ export default function ProjectsInDev() {
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 pr-20">
                   {project.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
                   {project.description}
                 </p>
 
+                {/* Features list */}
+                {"features" in project && Array.isArray(project.features) && (
+                  <ul className="space-y-2 mb-6 mt-2">
+                    {project.features.map((feature: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <CheckCircle2 size={14} className="text-green-500 mt-0.5 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
                 {/* Progress bar (decorative) */}
-                <div className="mt-6 space-y-1.5">
+                <div className="mt-auto pt-6 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-400 dark:text-gray-500">Progress</span>
                     <span className="text-xs font-medium text-green-600 dark:text-green-400">
-                      {20 + i * 12}%
+                      {project.progress}%
                     </span>
                   </div>
                   <div className="h-1 rounded-full bg-green-100 dark:bg-green-900/30 overflow-hidden">
                     <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-green-400 to-emerald-500"
+                      className={`h-full rounded-full bg-gradient-to-r from-green-400 to-emerald-500 ${
+                        project.progress === 100 ? "shadow-[0_0_10px_rgba(52,211,153,0.5)]" : ""
+                      }`}
                       initial={{ width: 0 }}
-                      animate={isInView ? { width: `${20 + i * 12}%` } : {}}
+                      animate={isInView ? { width: `${project.progress}%` } : {}}
                       transition={{ duration: 1, delay: 0.5 + i * 0.1 }}
                     />
                   </div>

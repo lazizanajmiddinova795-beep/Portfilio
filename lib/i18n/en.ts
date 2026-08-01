@@ -76,11 +76,13 @@ export const en: Translations = {
   },
 
   projectsInDev: {
-    badge: "In Development",
-    title: "Building the future",
-    subtitle: "Projects currently under active development — pushing the boundaries of what modern software can do.",
+    badge: "What's Next",
+    title: "In Development",
+    subtitle:
+      "A sneak peek at the exciting projects and services currently being built.",
     status: "In Development",
-    projects: getProjectsInDevForLang(lang),
+    availableStatus: "Available",
+    projects: getProjectsInDevForLang("en"),
   },
 
   learning: {

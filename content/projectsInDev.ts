@@ -10,6 +10,7 @@
 export interface ProjectInDevLang {
   name: string;
   description: string;
+  features?: string[];
 }
 
 export interface ProjectInDev {
@@ -65,65 +66,143 @@ export const projectsInDev: ProjectInDev[] = [
   },
 
   {
-    id: "smart-hotel",
-    icon: "Building2",
-    progress: 44,
+    id: "crm-development",
+    icon: "Users",
+    progress: 100,
     en: {
-      name: "Smart Hotel Management System",
-      description:
-        "An intelligent hotel operations platform covering reservations, housekeeping, billing and guest experience management.",
+      name: "CRM Development",
+      description: "Design and build custom CRM systems tailored to business workflows.",
+      features: [
+        "Customer Management",
+        "Sales Pipeline",
+        "Lead Tracking",
+        "Task Management",
+        "Employee Management",
+        "Analytics Dashboard",
+        "Automation",
+        "Reporting",
+        "Role & Permission System"
+      ],
     },
     uz: {
-      name: "Smart Mehmonxona Boshqaruv Tizimi",
-      description:
-        "Bronlash, xonalarni tozalash, hisob-kitob va mehmon tajribasini boshqarishni qamrab oluvchi aqlli mehmonxona operatsiyalari platformasi.",
+      name: "CRM Ishlab Chiqish",
+      description: "Biznes jarayonlariga moslashtirilgan maxsus CRM tizimlarini loyihalash va yaratish.",
+      features: [
+        "Mijozlarni Boshqarish",
+        "Savdo Tizimi",
+        "Lidlarni Kuzatish",
+        "Vazifalarni Boshqarish",
+        "Xodimlarni Boshqarish",
+        "Tahlil Paneli",
+        "Avtomatlashtirish",
+        "Hisobotlar",
+        "Rollar va Ruxsatlar Tizimi"
+      ],
     },
     ru: {
-      name: "Умная Система Управления Отелем",
-      description:
-        "Интеллектуальная платформа для управления операциями отеля, охватывающая бронирование, уборку, выставление счетов и управление гостевым опытом.",
+      name: "Разработка CRM",
+      description: "Проектирование и создание пользовательских CRM-систем, адаптированных к рабочим процессам бизнеса.",
+      features: [
+        "Управление Клиентами",
+        "Воронка Продаж",
+        "Отслеживание Лидов",
+        "Управление Задачами",
+        "Управление Сотрудниками",
+        "Аналитическая Панель",
+        "Автоматизация",
+        "Отчетность",
+        "Система Ролей и Разрешений"
+      ],
     },
   },
 
   {
-    id: "library-management",
-    icon: "BookOpen",
-    progress: 56,
+    id: "business-automation-bots",
+    icon: "Bot",
+    progress: 100,
     en: {
-      name: "Library Management System",
-      description:
-        "A modern digital library system with catalog management, member tracking, borrowing workflows and automated notifications.",
+      name: "Business Automation Bots",
+      description: "Develop intelligent automation bots for businesses to improve communication, customer support and internal workflows.",
+      features: [
+        "Telegram Bot",
+        "WhatsApp Bot",
+        "Discord Bot",
+        "AI Assistant",
+        "Customer Support Bot",
+        "Notification Bot",
+        "Order Management Bot",
+        "Booking Bot"
+      ],
     },
     uz: {
-      name: "Kutubxona Boshqaruv Tizimi",
-      description:
-        "Katalog boshqaruvi, a'zolarni kuzatish, kitob olish jarayonlari va avtomatlashtirilgan bildirishnomalar bilan zamonaviy raqamli kutubxona tizimi.",
+      name: "Biznesni Avtomatlashtirish Botlari",
+      description: "Aloqa, mijozlarni qo'llab-quvvatlash va ichki jarayonlarni yaxshilash uchun korxonalar uchun aqlli avtomatlashtirish botlarini ishlab chiqish.",
+      features: [
+        "Telegram Bot",
+        "WhatsApp Bot",
+        "Discord Bot",
+        "AI Yordamchi",
+        "Mijozlarni Qo'llab-quvvatlash Boti",
+        "Bildirishnoma Boti",
+        "Buyurtmalarni Boshqarish Boti",
+        "Bronlash Boti"
+      ],
     },
     ru: {
-      name: "Система Управления Библиотекой",
-      description:
-        "Современная цифровая библиотечная система с управлением каталогом, отслеживанием участников, рабочими процессами выдачи книг и автоматическими уведомлениями.",
+      name: "Боты Автоматизации Бизнеса",
+      description: "Разработка интеллектуальных ботов автоматизации для бизнеса с целью улучшения коммуникации, поддержки клиентов и внутренних рабочих процессов.",
+      features: [
+        "Telegram Бот",
+        "WhatsApp Бот",
+        "Discord Бот",
+        "AI Ассистент",
+        "Бот Поддержки Клиентов",
+        "Бот Уведомлений",
+        "Бот Управления Заказами",
+        "Бот Бронирования"
+      ],
     },
   },
 
   {
-    id: "camera-management",
-    icon: "Camera",
-    progress: 68,
+    id: "custom-business-solutions",
+    icon: "Briefcase",
+    progress: 100,
     en: {
-      name: "Camera Management Platform",
-      description:
-        "A centralized platform for managing surveillance cameras, live feeds, recordings and smart security event detection.",
+      name: "Custom Business Solutions",
+      description: "Develop tailor-made software solutions for companies including ERP systems, management platforms, dashboards, SaaS applications and workflow automation.",
+      features: [
+        "ERP Systems",
+        "SaaS Platforms",
+        "Management Systems",
+        "Business Dashboards",
+        "Internal Company Software",
+        "Web Portals"
+      ],
     },
     uz: {
-      name: "Kamera Boshqaruv Platformasi",
-      description:
-        "Kuzatuv kameralarini, jonli translyatsiyalarni, yozuvlarni va aqlli xavfsizlik hodisalarini aniqlashni boshqarish uchun markazlashtirilgan platforma.",
+      name: "Maxsus Biznes Yechimlari",
+      description: "Kompaniyalar uchun ERP tizimlari, boshqaruv platformalari, panellar, SaaS ilovalari va ish oqimini avtomatlashtirish kabi maxsus dasturiy yechimlarni ishlab chiqish.",
+      features: [
+        "ERP Tizimlari",
+        "SaaS Platformalari",
+        "Boshqaruv Tizimlari",
+        "Biznes Panellari",
+        "Ichki Kompaniya Dasturlari",
+        "Veb Portallar"
+      ],
     },
     ru: {
-      name: "Платформа Управления Камерами",
-      description:
-        "Централизованная платформа для управления камерами видеонаблюдения, прямыми трансляциями, записями и интеллектуальным обнаружением событий безопасности.",
+      name: "Пользовательские Бизнес-Решения",
+      description: "Разработка индивидуальных программных решений для компаний, включая ERP-системы, платформы управления, панели мониторинга, SaaS-приложения и автоматизацию рабочих процессов.",
+      features: [
+        "ERP Системы",
+        "SaaS Платформы",
+        "Системы Управления",
+        "Бизнес-Панели",
+        "Внутреннее Программное Обеспечение",
+        "Веб-Порталы"
+      ],
     },
   },
 ];

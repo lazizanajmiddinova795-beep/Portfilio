@@ -79,6 +79,7 @@ export const uz: Translations = {
     title: "Kelajakni qurish",
     subtitle: "Hozirda faol ishlab chiqilayotgan loyihalar — zamonaviy dasturiy ta'minot chegaralarini kengaytirish.",
     status: "Ishlab Chiqilmoqda",
+    availableStatus: "Mavjud",
     projects: getProjectsInDevForLang(lang),
   },
 

@@ -79,6 +79,7 @@ export const ru: Translations = {
     title: "Строим будущее",
     subtitle: "Проекты, находящиеся в активной разработке — расширяющие границы возможного в современном ПО.",
     status: "В Разработке",
+    availableStatus: "Доступно",
     projects: getProjectsInDevForLang(lang),
   },
 
