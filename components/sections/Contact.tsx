@@ -53,15 +53,28 @@ export default function Contact() {
       e.preventDefault();
       setStatus("sending");
 
-      // Simulate send (replace with real API in production)
-      await new Promise((r) => setTimeout(r, 1500));
+      try {
+        // Call the API route
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
 
-      // For demo: always succeeds
-      setStatus("success");
-      setForm({ name: "", email: "", subject: "", message: "" });
+        if (!response.ok) {
+          throw new Error("Failed to send message");
+        }
 
+        setStatus("success");
+        setForm({ name: "", email: "", subject: "", message: "" });
+
+        setTimeout(() => setStatus("idle"), 5000);
+      } catch (error) {
+      console.error(error);
+      setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
-    },
+    }
+  },
     [form]
   );
 
@@ -101,13 +114,6 @@ export default function Contact() {
       label: t.contact.info.email,
       value: profile.contact.email,
       href: `mailto:${profile.contact.email}`,
-      copyable: true,
-    },
-    {
-      icon: Phone,
-      label: t.contact.info.phone,
-      value: profile.contact.phone,
-      href: profile.contact.phoneUrl,
       copyable: true,
     },
   ];
