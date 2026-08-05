@@ -1,5 +1,14 @@
-import { Phase2Placeholder } from '@/components/admin/Phase2Placeholder';
+import { prisma } from "@/lib/prisma";
+import { AboutClient } from "./AboutClient";
 
-export default function Page() {
-  return <Phase2Placeholder title="About Module" />;
+export const metadata = {
+  title: "About | Portfolio CMS",
+};
+
+export default async function AboutPage() {
+  const about = await prisma.about.findUnique({
+    where: { slug: "main" },
+  });
+
+  return <AboutClient about={about} />;
 }

@@ -1,5 +1,17 @@
-import { Phase2Placeholder } from '@/components/admin/Phase2Placeholder';
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { prisma } from "@/lib/prisma";
+import ServicesClient from "./ServicesClient";
 
-export default function Page() {
-  return <Phase2Placeholder title="Services Module" />;
+export default async function ServicesPage() {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/admin/login");
+
+  const services = await prisma.service.findMany({
+    where: { deletedAt: null },
+    orderBy: { order: "asc" },
+  });
+
+  return <ServicesClient services={services} />;
 }

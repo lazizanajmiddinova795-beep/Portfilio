@@ -1,5 +1,21 @@
-import { Phase2Placeholder } from '@/components/admin/Phase2Placeholder';
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { prisma } from "@/lib/prisma";
+import ProjectsClient from "./ProjectsClient";
 
-export default function Page() {
-  return <Phase2Placeholder title="Projects Module" />;
+export const metadata = {
+  title: "Projects | Portfolio CMS",
+};
+
+export default async function ProjectsPage() {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/admin/login");
+
+  const projects = await prisma.project.findMany({
+    where: { deletedAt: null },
+    orderBy: { order: "asc" },
+  });
+
+  return <ProjectsClient projects={projects} />;
 }

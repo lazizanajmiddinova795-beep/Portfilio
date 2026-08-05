@@ -1,6 +1,6 @@
 // ============================================================
-// Portfolio CMS - Prisma Schema
-// Phase 2: Full PostgreSQL Integration via Neon (Vercel)
+// Portfolio CMS — Prisma Schema (Production)
+// Database: Neon PostgreSQL via Vercel
 // ============================================================
 
 generator client {
@@ -9,12 +9,17 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 // ============================================================
-// Enums
+// ENUMS
 // ============================================================
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
 
 enum Status {
   DRAFT
@@ -28,8 +33,7 @@ enum MessageStatus {
 }
 
 // ============================================================
-// User (Admin Authentication)
-// Phase 2: Replaces .env.local admin credentials
+// USER (Authentication)
 // ============================================================
 
 model User {
@@ -37,320 +41,353 @@ model User {
   name      String
   email     String   @unique
   password  String   // bcrypt hashed
-  role      String   @default("admin")
+  role      Role     @default(ADMIN)
+  avatar    String?
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
 
   // Soft delete
   deletedAt DateTime?
 
+  @@index([email])
+  @@index([deletedAt])
   @@map("users")
 }
 
 // ============================================================
-// Profile (Hero section content)
+// PROFILE (Hero section)
+// i18n: roles titles stored as JSON
 // ============================================================
 
 model Profile {
-  id          String   @id @default(cuid())
-  name        String
-  title       String
-  subtitle    String?
-  bio         String?
-  avatar      String?
-  cvUrl       String?
-  location    String?
+  id        String   @id @default(cuid())
+  name      String
+  firstName String
+  lastName  String
+  age       Int?
+  location  String?
+  team      String?
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Multilingual roles (typing animation)
+  // { uz: [...], en: [...], ru: [...] }
+  roles     Json     @default("{}")
+
+  // Contact info
+  email     String?
+  telegram  String?
+  telegramUrl String?
+  phone     String?
+  phoneUrl  String?
+
+  // Media
+  avatarUrl String?
+  cvUrl     String?
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
   @@map("profiles")
 }
 
 // ============================================================
-// About (About section long content)
+// ABOUT (About section)
+// i18n: content per language
 // ============================================================
 
 model About {
-  id          String   @id @default(cuid())
-  content     String   @db.Text
-  highlights  Json?    // Array of highlight items
-  imageUrl    String?
+  id       String  @id @default(cuid())
+  slug     String  @unique @default("main")
 
-  // Auto-save support (stored as draft until published)
-  status    Status   @default(DRAFT)
+  // { uz: "...", en: "...", ru: "..." }
+  content  Json    @default("{}")
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Highlights array: [{ icon, en, uz, ru }]
+  highlights Json  @default("[]")
+
+  imageUrl  String?
+  status    Status  @default(DRAFT)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
   @@map("abouts")
 }
 
 // ============================================================
-// Skill
+// SKILL
 // ============================================================
 
 model Skill {
-  id          String   @id @default(cuid())
-  name        String
-  level       Int      @default(80) // 0-100 percentage
-  category    String   // e.g., "Frontend", "Backend", "DevOps"
-  icon        String?
-  order       Int      @default(0)
+  id       String  @id @default(cuid())
+  name     String
+  level    Int     @default(80)
+  category String  // "frontend" | "backend" | "database" | "tools" | "ai"
+  icon     String?
+  order    Int     @default(0)
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([category])
+  @@index([deletedAt])
   @@map("skills")
 }
 
 // ============================================================
-// TechStack
+// TECH STACK
 // ============================================================
 
 model TechStack {
-  id          String   @id @default(cuid())
-  name        String
-  icon        String?
-  category    String?
-  order       Int      @default(0)
+  id       String  @id @default(cuid())
+  name     String
+  icon     String?
+  category String?
+  order    Int     @default(0)
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([deletedAt])
   @@map("tech_stacks")
 }
 
 // ============================================================
-// Project
+// PROJECT
+// i18n: tagline, description, features per language
 // ============================================================
 
 model Project {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  imageUrl    String?
-  liveUrl     String?
-  githubUrl   String?
-  tags        String[] // Array of tag strings
-  features    Json?    // Array of feature strings
-  order       Int      @default(0)
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  name     String  // product name (same all langs)
+  gradient String? // CSS gradient class
 
-  // Draft / Published
-  status    Status   @default(DRAFT)
+  // { uz: { tagline, description, features[] }, en: {...}, ru: {...} }
+  i18n     Json    @default("{}")
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Legacy / English fallback
+  description String? @db.Text
+  tags        String[]
+
+  liveUrl    String?
+  githubUrl  String?
+  imageUrl   String?
+  images     String[] // array of image URLs
+
+  status  Status  @default(DRAFT)
+  order   Int     @default(0)
+  featured Boolean @default(false)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([status])
+  @@index([deletedAt])
   @@map("projects")
 }
 
 // ============================================================
-// Service (Professional services offered)
+// SERVICE
+// i18n: title, description per language
 // ============================================================
 
 model Service {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  features    Json?    // Array of feature strings
-  icon        String?
-  price       String?
-  order       Int      @default(0)
+  id   String  @id @default(cuid())
+  slug String  @unique
+  icon String?
 
-  // Draft / Published
-  status    Status   @default(DRAFT)
+  // { uz: { title, description }, en: {...}, ru: {...} }
+  i18n Json   @default("{}")
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  features Json?  // { uz: [...], en: [...], ru: [...] }
+  price    String?
+  order    Int     @default(0)
+
+  status  Status  @default(DRAFT)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([status])
+  @@index([deletedAt])
   @@map("services")
 }
 
 // ============================================================
-// InDevelopment (Coming soon projects)
+// IN DEVELOPMENT (Coming Soon projects)
+// i18n: title, description per language
 // ============================================================
 
 model InDevelopment {
-  id          String   @id @default(cuid())
-  title       String
-  description String   @db.Text
-  progress    Int      @default(0) // 0-100 percentage
-  tags        String[]
-  icon        String?
-  order       Int      @default(0)
+  id   String  @id @default(cuid())
+  slug String  @unique
+  icon String?
 
-  // Draft / Published
-  status    Status   @default(DRAFT)
+  // { uz: { title, description }, en: {...}, ru: {...} }
+  i18n     Json    @default("{}")
+  tags     String[]
+  progress Int     @default(0) // 0-100
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status  Status  @default(DRAFT)
+  order   Int     @default(0)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([deletedAt])
   @@map("in_development")
 }
 
 // ============================================================
-// Contact (Contact form submissions)
-// ============================================================
-
-model ContactMessage {
-  id        String        @id @default(cuid())
-  name      String
-  email     String
-  subject   String?
-  message   String        @db.Text
-  status    MessageStatus @default(UNREAD)
-
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdBy String?
-  updatedBy String?
-
-  // Soft delete
-  deletedAt DateTime?
-
-  @@map("contact_messages")
-}
-
-// ============================================================
-// SocialLink
+// SOCIAL LINK
 // ============================================================
 
 model SocialLink {
-  id       String   @id @default(cuid())
-  platform String   // "github", "linkedin", "telegram", etc.
+  id       String  @id @default(cuid())
+  platform String  // "github" | "linkedin" | "telegram" | "email"
   url      String
   icon     String?
   label    String?
-  order    Int      @default(0)
+  order    Int     @default(0)
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([deletedAt])
   @@map("social_links")
 }
 
 // ============================================================
-// Media (Uploaded images)
+// MEDIA (Uploaded files via Vercel Blob)
 // ============================================================
 
 model Media {
-  id          String   @id @default(cuid())
-  filename    String
-  url         String
-  alt         String?
-  size        Int?     // in bytes
-  mimeType    String?
-  width       Int?
-  height      Int?
+  id       String  @id @default(cuid())
+  filename String
+  url      String  // Vercel Blob URL
+  alt      String?
+  type     String  // "image" | "pdf" | "favicon"
+  size     Int?    // bytes
+  mimeType String?
+  width    Int?
+  height   Int?
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
+  @@index([type])
+  @@index([deletedAt])
   @@map("media")
 }
 
 // ============================================================
-// SEO Settings
+// SEO
 // ============================================================
 
 model SEO {
-  id              String   @id @default(cuid())
-  title           String
-  description     String   @db.Text
-  keywords        String[]
-  ogImageUrl      String?
-  twitterHandle   String?
-  canonicalUrl    String?
+  id            String   @id @default(cuid())
+  slug          String   @unique @default("main")
 
-  // Auto-save support
-  status    Status   @default(DRAFT)
+  title         String
+  description   String   @db.Text
+  keywords      String[]
+  ogImageUrl    String?
+  twitterHandle String?
+  canonicalUrl  String?
+  robots        String   @default("index, follow")
+  faviconUrl    String?
 
-  // Audit fields
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // i18n SEO: { uz: { title, desc }, en: {...}, ru: {...} }
+  i18n          Json     @default("{}")
+
+  status  Status  @default(DRAFT)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   createdBy String?
   updatedBy String?
-
-  // Soft delete
   deletedAt DateTime?
 
   @@map("seo")
 }
 
 // ============================================================
-// Settings (Global admin settings)
+// LANGUAGE (Enabled portfolio languages)
+// ============================================================
+
+model Language {
+  id      String  @id @default(cuid())
+  code    String  @unique // "uz" | "en" | "ru"
+  name    String  // "O'zbek" | "English" | "Русский"
+  flag    String? // emoji
+  enabled Boolean @default(true)
+  isDefault Boolean @default(false)
+  order   Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("languages")
+}
+
+// ============================================================
+// SETTING (Key-value store for global settings)
 // ============================================================
 
 model Setting {
-  id    String @id @default(cuid())
-  key   String @unique
-  value String @db.Text
+  id    String  @id @default(cuid())
+  key   String  @unique
+  value String  @db.Text
+  label String?
+  group String? // "general" | "contact" | "appearance"
 
-  // Audit fields
+  // Audit
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdBy String?
   updatedBy String?
 
+  @@index([group])
   @@map("settings")
 }

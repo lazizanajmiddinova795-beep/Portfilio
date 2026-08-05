@@ -1,5 +1,15 @@
-import { Phase2Placeholder } from '@/components/admin/Phase2Placeholder';
+import { prisma } from "@/lib/prisma";
+import { SkillsClient } from "./SkillsClient";
 
-export default function Page() {
-  return <Phase2Placeholder title="Skills Module" />;
+export const metadata = {
+  title: "Skills | Portfolio CMS",
+};
+
+export default async function SkillsPage() {
+  const skills = await prisma.skill.findMany({
+    where: { deletedAt: null },
+    orderBy: { order: "asc" },
+  });
+
+  return <SkillsClient skills={skills} />;
 }
