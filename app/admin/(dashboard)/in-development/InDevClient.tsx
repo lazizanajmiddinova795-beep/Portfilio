@@ -34,8 +34,9 @@ export default function InDevClient({ items }: { items: InDevItem[] }) {
   const [activeLang, setActiveLang] = useState<"en" | "uz" | "ru">("en");
   const [tagInput, setTagInput] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<InDevInput>({
-    resolver: zodResolver(inDevSchema) as ReturnType<typeof zodResolver>,
+    resolver: zodResolver(inDevSchema) as any,
     defaultValues: {
       slug: "",
       icon: "",

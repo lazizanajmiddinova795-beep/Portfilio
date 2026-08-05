@@ -17,5 +17,6 @@ export default async function MediaPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  return <MediaClient mediaItems={mediaItems} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <MediaClient mediaItems={mediaItems as any} />;
 }

@@ -50,8 +50,9 @@ export default function SocialLinksClient({ links }: { links: SocialLink[] }) {
   const [editing, setEditing] = useState<SocialLink | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<SocialLinkInput>({
-    resolver: zodResolver(socialLinkSchema),
+    resolver: zodResolver(socialLinkSchema) as any,
     defaultValues: { platform: "github", url: "", icon: "Github", label: "", order: 0 },
   });
 

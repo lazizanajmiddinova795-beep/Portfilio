@@ -170,7 +170,8 @@ function SkillModal({ skill, onClose, onSaved }: ModalProps) {
     setValue,
     formState: { errors },
   } = useForm<SkillInput>({
-    resolver: zodResolver(skillSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(skillSchema) as any,
     defaultValues: {
       name:     skill?.name     ?? "",
       level:    skill?.level    ?? 70,

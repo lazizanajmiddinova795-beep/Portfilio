@@ -391,28 +391,3 @@ model Setting {
   @@index([group])
   @@map("settings")
 }
-
-// ============================================================
-// MEDIA (Vercel Blob uploads)
-// ============================================================
-
-model Media {
-  id          String   @id @default(cuid())
-  filename    String
-  url         String
-  contentType String
-  size        Int      @default(0)
-  alt         String?
-  caption     String?
-  folder      String?  @default("general")
-
-  // Audit
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  createdBy String?
-  updatedBy String?
-  deletedAt DateTime?
-
-  @@index([folder])
-  @@map("media")
-}

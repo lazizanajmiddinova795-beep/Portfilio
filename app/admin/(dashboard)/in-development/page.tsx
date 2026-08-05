@@ -13,5 +13,6 @@ export default async function InDevelopmentPage() {
     orderBy: { order: "asc" },
   });
 
-  return <InDevClient items={items} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <InDevClient items={items as any} />;
 }

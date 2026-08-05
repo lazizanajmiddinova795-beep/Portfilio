@@ -379,7 +379,9 @@ function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 
 // ─── Main exported component ──────────────────────────────────────────────────
 
-const containerVariants = {
+import type { Variants } from "framer-motion";
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -387,7 +389,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,

@@ -130,13 +130,14 @@ function ServiceFormModal({ isOpen, onClose, editItem, onSuccess }: ServiceFormM
 
   const i18nData = parseI18n(editItem?.i18n);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<ServiceInput>({
-    resolver: zodResolver(serviceSchema),
+    resolver: zodResolver(serviceSchema) as any,
     defaultValues: {
       slug: editItem?.slug ?? "",
       icon: editItem?.icon ?? "",

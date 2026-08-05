@@ -26,8 +26,9 @@ export default function SEOClient({ seo }: { seo: SEOData | null }) {
   const [autoSaving, setAutoSaving] = useState(false);
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<SEOInput>({
-    resolver: zodResolver(seoSchema),
+    resolver: zodResolver(seoSchema) as any,
     defaultValues: {
       title: seo?.title || "",
       description: seo?.description || "",

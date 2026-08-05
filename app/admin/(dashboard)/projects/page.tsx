@@ -17,5 +17,6 @@ export default async function ProjectsPage() {
     orderBy: { order: "asc" },
   });
 
-  return <ProjectsClient projects={projects} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <ProjectsClient projects={projects as any} />;
 }

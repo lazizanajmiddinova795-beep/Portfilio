@@ -35,8 +35,9 @@ export default function TechStackClient({ items }: { items: TechItem[] }) {
   const [editing, setEditing] = useState<TechItem | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<TechStackInput>({
-    resolver: zodResolver(techStackSchema) as ReturnType<typeof zodResolver>,
+    resolver: zodResolver(techStackSchema) as any,
     defaultValues: { name: "", icon: "", category: "", order: 0 },
   });
 

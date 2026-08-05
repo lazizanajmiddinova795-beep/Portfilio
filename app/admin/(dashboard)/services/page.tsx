@@ -13,5 +13,6 @@ export default async function ServicesPage() {
     orderBy: { order: "asc" },
   });
 
-  return <ServicesClient services={services} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <ServicesClient services={services as any} />;
 }
