@@ -4,11 +4,25 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
-  // Only allow in production for authenticated admins
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function GET(req: Request) {
+  return handleSeed(req);
+}
+
+export async function POST(req: Request) {
+  return handleSeed(req);
+}
+
+async function handleSeed(req: Request) {
+  const url = new URL(req.url);
+  const secret = url.searchParams.get("secret");
+
+  // Bypass auth if the secret matches (for initial setup)
+  if (secret !== "init123") {
+    // Only allow in production for authenticated admins if no secret is provided
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
   }
 
   try {
