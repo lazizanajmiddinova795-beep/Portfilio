@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Search, Globe, Twitter, Tag, Save, Loader2 } from "lucide-react";
+import { Search, Globe, Tag, Save, Loader2, X } from "lucide-react";
 import { seoSchema, type SEOInput } from "@/lib/validations/schemas";
 import { saveSEOAction } from "@/lib/actions/cms.actions";
 
@@ -243,7 +243,7 @@ export default function SEOClient({ seo }: { seo: SEOData | null }) {
         >
           <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center">
-              <Twitter size={18} className="text-white" />
+              <X size={18} className="text-white" />
             </div>
             <h2 className="font-bold text-gray-800">Twitter Card</h2>
           </div>

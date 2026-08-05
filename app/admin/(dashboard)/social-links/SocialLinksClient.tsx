@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, X, Github, Linkedin, Send, Mail, Globe, Twitter, Youtube, Instagram, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Link2, Globe, ExternalLink } from "lucide-react";
 import { socialLinkSchema, type SocialLinkInput } from "@/lib/validations/schemas";
 import {
   createSocialLinkAction,
@@ -22,25 +22,26 @@ interface SocialLink {
   order: number;
 }
 
-const PLATFORM_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
-  github: Github,
-  linkedin: Linkedin,
-  telegram: Send,
-  email: Mail,
-  twitter: Twitter,
-  youtube: Youtube,
-  instagram: Instagram,
+const PLATFORM_EMOJIS: Record<string, string> = {
+  github: "🐙",
+  linkedin: "💼",
+  telegram: "✈️",
+  email: "📧",
+  twitter: "🐦",
+  youtube: "▶️",
+  instagram: "📸",
+  website: "🌐",
 };
 
 const PLATFORMS = [
-  { value: "github", label: "GitHub", icon: "Github" },
-  { value: "linkedin", label: "LinkedIn", icon: "Linkedin" },
-  { value: "telegram", label: "Telegram", icon: "Send" },
-  { value: "email", label: "Email", icon: "Mail" },
-  { value: "twitter", label: "Twitter/X", icon: "Twitter" },
-  { value: "youtube", label: "YouTube", icon: "Youtube" },
-  { value: "instagram", label: "Instagram", icon: "Instagram" },
-  { value: "website", label: "Website", icon: "Globe" },
+  { value: "github", label: "GitHub" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "telegram", label: "Telegram" },
+  { value: "email", label: "Email" },
+  { value: "twitter", label: "Twitter/X" },
+  { value: "youtube", label: "YouTube" },
+  { value: "instagram", label: "Instagram" },
+  { value: "website", label: "Website" },
 ];
 
 export default function SocialLinksClient({ links }: { links: SocialLink[] }) {
@@ -132,7 +133,7 @@ export default function SocialLinksClient({ links }: { links: SocialLink[] }) {
           </div>
         ) : (
           items.map((link) => {
-            const IconComp = PLATFORM_ICONS[link.platform] || Globe;
+            const emoji = PLATFORM_EMOJIS[link.platform] || "🔗";
             return (
               <motion.div
                 key={link.id}
@@ -141,8 +142,8 @@ export default function SocialLinksClient({ links }: { links: SocialLink[] }) {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-5 rounded-3xl bg-[#e8f0e8] shadow-[8px_8px_16px_#c8d8c8,-8px_-8px_16px_#ffffff] flex items-center gap-4"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-[4px_4px_8px_#c8d8c8,-4px_-4px_8px_#ffffff]">
-                  <IconComp size={22} />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-[4px_4px_8px_#c8d8c8,-4px_-4px_8px_#ffffff] text-2xl">
+                  {emoji}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-800 capitalize">{link.label || link.platform}</p>
@@ -203,7 +204,6 @@ export default function SocialLinksClient({ links }: { links: SocialLink[] }) {
                       onChange: (e) => {
                         const p = PLATFORMS.find((pl) => pl.value === e.target.value);
                         if (p) {
-                          form.setValue("icon", p.icon);
                           form.setValue("label", p.label);
                         }
                       },

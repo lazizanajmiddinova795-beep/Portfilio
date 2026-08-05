@@ -9,7 +9,7 @@ import {
   Pencil,
   Trash2,
   Globe,
-  Github,
+  Link2,
   Image as ImageIcon,
   Star,
   StarOff,
@@ -405,7 +405,7 @@ export default function ProjectsClient({ projects: initialProjects }: Props) {
               className="p-1.5 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
               title="GitHub"
             >
-              <Github className="w-4 h-4" />
+              <Link2 className="w-4 h-4" />
             </a>
           )}
           {!p.liveUrl && !p.githubUrl && (
@@ -632,7 +632,7 @@ export default function ProjectsClient({ projects: initialProjects }: Props) {
 
                       {/* GitHub URL */}
                       <div>
-                        <Label icon={<Github className="w-3.5 h-3.5" />}>
+                        <Label icon={<Link2 className="w-3.5 h-3.5" />}>
                           GitHub URL
                         </Label>
                         <input
