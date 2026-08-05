@@ -1,0 +1,356 @@
+// ============================================================
+// Portfolio CMS - Prisma Schema
+// Phase 2: Full PostgreSQL Integration via Neon (Vercel)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+// ============================================================
+// Enums
+// ============================================================
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+// ============================================================
+// User (Admin Authentication)
+// Phase 2: Replaces .env.local admin credentials
+// ============================================================
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // bcrypt hashed
+  role      String   @default("admin")
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("users")
+}
+
+// ============================================================
+// Profile (Hero section content)
+// ============================================================
+
+model Profile {
+  id          String   @id @default(cuid())
+  name        String
+  title       String
+  subtitle    String?
+  bio         String?
+  avatar      String?
+  cvUrl       String?
+  location    String?
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("profiles")
+}
+
+// ============================================================
+// About (About section long content)
+// ============================================================
+
+model About {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  highlights  Json?    // Array of highlight items
+  imageUrl    String?
+
+  // Auto-save support (stored as draft until published)
+  status    Status   @default(DRAFT)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("abouts")
+}
+
+// ============================================================
+// Skill
+// ============================================================
+
+model Skill {
+  id          String   @id @default(cuid())
+  name        String
+  level       Int      @default(80) // 0-100 percentage
+  category    String   // e.g., "Frontend", "Backend", "DevOps"
+  icon        String?
+  order       Int      @default(0)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("skills")
+}
+
+// ============================================================
+// TechStack
+// ============================================================
+
+model TechStack {
+  id          String   @id @default(cuid())
+  name        String
+  icon        String?
+  category    String?
+  order       Int      @default(0)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("tech_stacks")
+}
+
+// ============================================================
+// Project
+// ============================================================
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imageUrl    String?
+  liveUrl     String?
+  githubUrl   String?
+  tags        String[] // Array of tag strings
+  features    Json?    // Array of feature strings
+  order       Int      @default(0)
+
+  // Draft / Published
+  status    Status   @default(DRAFT)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("projects")
+}
+
+// ============================================================
+// Service (Professional services offered)
+// ============================================================
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  features    Json?    // Array of feature strings
+  icon        String?
+  price       String?
+  order       Int      @default(0)
+
+  // Draft / Published
+  status    Status   @default(DRAFT)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("services")
+}
+
+// ============================================================
+// InDevelopment (Coming soon projects)
+// ============================================================
+
+model InDevelopment {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  progress    Int      @default(0) // 0-100 percentage
+  tags        String[]
+  icon        String?
+  order       Int      @default(0)
+
+  // Draft / Published
+  status    Status   @default(DRAFT)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("in_development")
+}
+
+// ============================================================
+// Contact (Contact form submissions)
+// ============================================================
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String        @db.Text
+  status    MessageStatus @default(UNREAD)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("contact_messages")
+}
+
+// ============================================================
+// SocialLink
+// ============================================================
+
+model SocialLink {
+  id       String   @id @default(cuid())
+  platform String   // "github", "linkedin", "telegram", etc.
+  url      String
+  icon     String?
+  label    String?
+  order    Int      @default(0)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("social_links")
+}
+
+// ============================================================
+// Media (Uploaded images)
+// ============================================================
+
+model Media {
+  id          String   @id @default(cuid())
+  filename    String
+  url         String
+  alt         String?
+  size        Int?     // in bytes
+  mimeType    String?
+  width       Int?
+  height      Int?
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("media")
+}
+
+// ============================================================
+// SEO Settings
+// ============================================================
+
+model SEO {
+  id              String   @id @default(cuid())
+  title           String
+  description     String   @db.Text
+  keywords        String[]
+  ogImageUrl      String?
+  twitterHandle   String?
+  canonicalUrl    String?
+
+  // Auto-save support
+  status    Status   @default(DRAFT)
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  // Soft delete
+  deletedAt DateTime?
+
+  @@map("seo")
+}
+
+// ============================================================
+// Settings (Global admin settings)
+// ============================================================
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+
+  // Audit fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  @@map("settings")
+}

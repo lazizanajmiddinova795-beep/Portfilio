@@ -3,11 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { I18nProvider } from "@/components/providers/I18nProvider";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import LoadingScreen from "@/components/effects/LoadingScreen";
-import ScrollProgress from "@/components/effects/ScrollProgress";
-import CustomCursor from "@/components/effects/CustomCursor";
+import { AuthProvider } from "@/components/providers/AuthProvider";
+import { ToastProvider } from "@/components/admin/ui/ToastProvider";
 import { profile } from "@/content";
 
 const inter = Inter({
@@ -59,16 +56,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="bg-[#f0fdf4] dark:bg-[#0a0f0a] text-gray-900 dark:text-white antialiased selection:bg-green-200 dark:selection:bg-green-800/50 selection:text-green-900 dark:selection:text-green-100">
         <ThemeProvider>
-          <I18nProvider>
-            <LoadingScreen />
-            <ScrollProgress />
-            <CustomCursor />
-            <Navbar />
-            <main id="main-content" role="main">
-              {children}
-            </main>
-            <Footer />
-          </I18nProvider>
+          <AuthProvider>
+            <I18nProvider>
+              <main id="main-content" role="main">
+                {children}
+              </main>
+              <ToastProvider />
+            </I18nProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
