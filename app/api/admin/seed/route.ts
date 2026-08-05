@@ -161,6 +161,7 @@ async function handleSeed(req: Request) {
       success: true,
       message: "Database seeded successfully",
       admin: adminEmail,
+      dbUrl: process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL,
     });
   } catch (error) {
     console.error("Seed error:", error);
